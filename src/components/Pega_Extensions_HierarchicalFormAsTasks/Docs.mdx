@@ -1,16 +1,16 @@
-# Hierarchical Form as Tasks
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Hierarchical Form as Tasks
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_HierarchicalFormAsTasks`
-- **Type:** Template
-- **Subtype:** FORM
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+Note: This component is intended to be used with the UK Government Design System - see https://design-system.service.gov.uk/patterns/complete-multiple-tasks/
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+It is not recommended to use this component as a replacement of a screenflow - The list of tasks and assignments should be defined in the case designer.
 
-## Runtime
+<Primary />
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+## Props
+
+<Controls />

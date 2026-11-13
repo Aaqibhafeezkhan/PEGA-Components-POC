@@ -1,16 +1,18 @@
-# Field Group As Row
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Field Group As Row
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_FieldGroupAsRow`
-- **Type:** Template
-- **Subtype:** DETAILS
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+The FieldGroupAsRow component allows to render a field group horizontally instead of being render vertically - This behavior could be used to compare a couple of objects side-by-side or to reduce the amount of vertical scrolling.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+The component creates a wrapper DIV using styled component that changes the display of the fieldset component from a column to a row direction.
 
-## Runtime
+For more details on how to use this component, see [How to implement the compare and select pattern](https://support.pega.com/discussion/how-implement-compare-and-select-pattern-constellation-ui)
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+<Primary />
+
+## Props
+
+<Controls />

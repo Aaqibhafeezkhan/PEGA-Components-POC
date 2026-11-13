@@ -1,16 +1,16 @@
+import { Meta, Story } from '@storybook/addon-docs/blocks';
+import * as Stories from './demo.stories';
+
+<Meta of={Stories} />
+
 # JSON editor
 
-A multiline editor for JSON values with validation and formatting.
+`Pega_Extensions_JsonEditor` provides a multiline JSON field with syntax highlighting, validation, formatting, minification, copying, and clearing actions.
 
-- **Component key:** `Pega_Extensions_JsonEditor`
-- **Type:** Field
-- **Subtype:** Text-Paragraph
-- **Catalogue version:** 5.0.6
+## Example
 
-## Designer configuration
+<Story of={Stories.BaseJsonEditor} />
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+## Usage
 
-## Runtime
-
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+Use this component for editable JSON object or array values. The component updates the bound field through `getPConnect().getActionsApi()` and supports display-only and labels-left display modes.

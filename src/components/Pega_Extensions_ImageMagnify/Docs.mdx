@@ -1,16 +1,19 @@
-# Image Magnify
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Image Magnify
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_ImageMagnify`
-- **Type:** Field
-- **Subtype:** Text-URL
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+The Image Magnify component provides image magnification features. Users can zoom in on images either by hovering over them or by clicking/double-clicking, based on the specified trigger mode.
+This component offers two magnification modes: the default "Side by side" mode displays the original image on one side and the magnified version on the other. Users can customize this arrangement to display the zoomed image on the left or within the same space as the preview. Additionally, the zoomed image can be set to fill the available screen space if desired.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+In Advanced mode, users can access configuration options to adjust the size and position of the zoomed image, along with additional settings like z-index and preview image horizontal offset position for finer control.
 
-## Runtime
+This component operates with a single image provided via the mapped URL field. Users can adjust the size of the smaller image by setting the width value smaller than the actual width of the full referenced image.
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+<Primary />
+
+## Props
+
+<Controls />

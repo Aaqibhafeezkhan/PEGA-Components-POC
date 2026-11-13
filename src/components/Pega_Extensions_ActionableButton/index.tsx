@@ -1,16 +1,46 @@
-import { withConfiguration } from '@pega/cosmos-react-core';
-import { PegaComponentRuntime } from '../shared/PegaComponentRuntime';
-import type { PegaRuntimeProps } from '../shared/PegaComponentRuntime';
+import { withConfiguration, Flex, Button } from '@pega/cosmos-react-core';
 import '../shared/create-nonce';
 
-export type PegaExtensionsActionableButtonProps = Record<string, any>;
+type ActionableButtonProps = {
+  label: string;
+  value: string;
+  localAction: string;
+  getPConnect: () => typeof PConnect;
+};
 
-export const PegaExtensionsActionableButton = (props: PegaExtensionsActionableButtonProps) => (
-  <PegaComponentRuntime
-    {...(props as PegaRuntimeProps)}
-    componentKey="Pega_Extensions_ActionableButton"
-    componentType="Field"
-  />
-);
+export const PegaExtensionsActionableButton = (props: ActionableButtonProps) => {
+  const { getPConnect, label, value, localAction } = props;
+  if (value && localAction) {
+    const availableActions = getPConnect().getValue(PCore.getConstants().CASE_INFO.AVAILABLEACTIONS) || [];
+    const targetAction = availableActions.find((action: { ID: string }) => action.ID === localAction);
+    const localizedLabel =
+      getPConnect().getContextName().indexOf('workarea') !== -1
+        ? getPConnect().getLocalizedValue(
+            label,
+            undefined,
+            `${getPConnect().getCaseInfo().getClassName().toUpperCase()}!VIEW!PYCASESUMMARY`,
+          )
+        : label;
+    const actionName = targetAction?.name || localizedLabel;
+    const LaunchLocalAction = async () => {
+      const actionsAPI = getPConnect().getActionsApi();
+      if (getPConnect().getContainerName() === 'workarea') {
+        await actionsAPI.saveAssignment(getPConnect().getContextName());
+      }
+      actionsAPI.openLocalAction(localAction, {
+        caseID: value,
+        containerName: 'modal',
+        type: 'express',
+        name: actionName,
+      });
+    };
+    return (
+      <Flex container={{ direction: 'row' }}>
+        <Button onClick={LaunchLocalAction}>{localizedLabel}</Button>
+      </Flex>
+    );
+  }
+  return null;
+};
 
 export default withConfiguration(PegaExtensionsActionableButton);

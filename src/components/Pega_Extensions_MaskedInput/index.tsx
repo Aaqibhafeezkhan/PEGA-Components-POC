@@ -1,16 +1,138 @@
-import { withConfiguration } from '@pega/cosmos-react-core';
-import { PegaComponentRuntime } from '../shared/PegaComponentRuntime';
-import type { PegaRuntimeProps } from '../shared/PegaComponentRuntime';
+import { useEffect, useState, useRef, type MouseEvent } from 'react';
+import { withConfiguration, Input, Text } from '@pega/cosmos-react-core';
+import IMask, { type FactoryArg, type InputMaskElement } from 'imask';
 import '../shared/create-nonce';
 
-export type PegaExtensionsMaskedInputProps = Record<string, any>;
+export type MaskedInputProps = {
+  getPConnect: () => typeof PConnect;
+  label: string;
+  mask: string;
+  value?: string;
+  helperText?: string;
+  placeholder?: string;
+  validatemessage?: string;
+  hideLabel?: boolean;
+  disabled?: boolean;
+  readOnly?: boolean;
+  required?: boolean;
+  testId?: string;
+  fieldMetadata?: any;
+  additionalProps?: any;
+  /** display mode */
+  displayMode?: 'DISPLAY_ONLY' | '';
+  hasSuggestions?: boolean;
+};
 
-export const PegaExtensionsMaskedInput = (props: PegaExtensionsMaskedInputProps) => (
-  <PegaComponentRuntime
-    {...(props as PegaRuntimeProps)}
-    componentKey="Pega_Extensions_MaskedInput"
-    componentType="Field"
-  />
-);
+// props passed in combination of props from property panel (config.json) and run time props from Constellation
+// any default values in config.pros should be set in defaultProps at bottom of this file
+export const PegaExtensionsMaskedInput = (props: MaskedInputProps) => {
+  const {
+    getPConnect,
+    placeholder,
+    validatemessage = '',
+    label,
+    mask,
+    value,
+    hideLabel = false,
+    helperText = '',
+    testId = '',
+    fieldMetadata,
+    additionalProps,
+    displayMode,
+    hasSuggestions,
+  } = props;
+  const pConn = getPConnect();
+  const actions = pConn.getActionsApi();
+  const propName = pConn.getStateProps().value;
+  const maxLength = fieldMetadata?.maxLength;
+  const hasValueChangeRef = useRef(false);
+  const [maskObj, setMaskObj] = useState<any>(null);
+  const inputMaskRef = useRef<InputMaskElement>(null);
+
+  let { readOnly, required, disabled } = props;
+  [readOnly, required, disabled] = [readOnly, required, disabled].map(
+    (prop) => prop === true || (typeof prop === 'string' && prop === 'true'),
+  );
+
+  const [inputValue, setInputValue] = useState(value);
+  const [status, setStatus] = useState(hasSuggestions ? 'pending' : undefined);
+
+  useEffect(() => setInputValue(value), [value]);
+
+  useEffect(() => {
+    if (inputMaskRef?.current && !disabled && !readOnly) {
+      const maskOptions: FactoryArg = {
+        mask,
+        definitions: {
+          // defaults are '0', 'a', '*'
+          // You can extend by adding other characters
+          A: /[A-Z]/,
+        },
+      };
+      if (maskObj) {
+        maskObj.updateOptions(maskOptions);
+      } else {
+        setMaskObj(IMask(inputMaskRef.current, maskOptions));
+      }
+    }
+  }, [inputMaskRef, mask, disabled, readOnly, maskObj]);
+
+  useEffect(() => {
+    if (validatemessage !== '') {
+      setStatus('error');
+    }
+    if (hasSuggestions) {
+      setStatus('pending');
+    } else if (!hasSuggestions && status !== 'success') {
+      setStatus(validatemessage !== '' ? 'error' : undefined);
+    }
+  }, [validatemessage, hasSuggestions, status]);
+
+  const displayComp = value || '';
+  if (displayMode === 'DISPLAY_ONLY') {
+    return <Text>{displayComp}</Text>;
+  }
+
+  return (
+    <Input
+      {...additionalProps}
+      ref={inputMaskRef}
+      label={label}
+      labelHidden={hideLabel}
+      info={validatemessage || helperText || mask}
+      data-testid={testId}
+      value={inputValue}
+      status={status}
+      placeholder={placeholder}
+      disabled={disabled}
+      readOnly={readOnly}
+      required={required}
+      maxLength={maxLength}
+      onChange={(e: MouseEvent<HTMLInputElement>) => {
+        if (hasSuggestions) {
+          setStatus(undefined);
+        }
+        setInputValue(e.currentTarget.value);
+        if (value !== e.currentTarget.value) {
+          actions.updateFieldValue(propName, e.currentTarget.value);
+          hasValueChangeRef.current = true;
+        }
+      }}
+      onBlur={(e: MouseEvent<HTMLInputElement>) => {
+        if (e.currentTarget.value !== value) {
+          setInputValue(e.currentTarget.value);
+          actions.updateFieldValue(propName, e.currentTarget.value);
+        }
+        if (!value || hasValueChangeRef.current) {
+          actions.triggerFieldChange(propName, e.currentTarget.value);
+          if (hasSuggestions) {
+            pConn.ignoreSuggestion();
+          }
+          hasValueChangeRef.current = false;
+        }
+      }}
+    />
+  );
+};
 
 export default withConfiguration(PegaExtensionsMaskedInput);

@@ -1,16 +1,18 @@
-# Banner Input
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Banner Input
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_BannerInput`
-- **Type:** Field
-- **Subtype:** Text-Paragraph
-- **Catalogue version:** 5.0.6
+# Support
 
-## Designer configuration
+This component is **deprecated** and may be removed in a future release of the UI Gallery. In Pega '26, you can add a banner as instruction text. While this component is more flexible and can be placed anywhere in a form, prefer the out-of-the-box functionality when possible.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+# Overview
 
-## Runtime
+The banner input can be used inside a form to display some information to the user. Apply this component to a field of type textarea. The banner is usually display on change on another input field.
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+<Primary />
+
+## Props
+
+<Controls />

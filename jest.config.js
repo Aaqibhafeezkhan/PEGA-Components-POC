@@ -1,0 +1,32 @@
+const packagesToTranspile = [
+  '@pega/cosmos-react-core',
+  '@pega/cosmos-react-social',
+  '@pega/cosmos-react-rte',
+  '@pega/cosmos-react-work',
+  '@storybook/react',
+  'storybook',
+  'shortcuts',
+  'preact',
+];
+const packagesToTranspileStr = packagesToTranspile.map((p) => `${p}`).join('|');
+
+module.exports = {
+  preset: 'ts-jest',
+  verbose: true,
+  moduleNameMapper: {
+    shortcuts: '<rootDir>/node_modules/shortcuts/dist/index.js',
+  },
+  collectCoverageFrom: ['src/components/**/*.{ts,tsx,js,jsx}', '!**/*.(test|stories).{ts,tsx,js,jsx}'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  moduleDirectories: ['node_modules', 'src'],
+  // Polyfill before setupFiles so cosmos-react-core can load under jsdom.
+  setupFiles: ['./jest.polyfills.ts', './setupFiles.ts'],
+  setupFilesAfterEnv: ['./setupTests.ts'],
+  testPathIgnorePatterns: ['<rootDir>/lib/'],
+  transformIgnorePatterns: [`node_modules/(?!(${packagesToTranspileStr}))`],
+  testEnvironment: 'jsdom',
+  transform: {
+    '\\.[jt]sx?$': 'babel-jest',
+    '^.+\\.(ts|tsx)?$': 'ts-jest',
+  },
+};

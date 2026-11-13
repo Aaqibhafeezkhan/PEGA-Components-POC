@@ -1,16 +1,16 @@
-# Form with Vertical Stepper
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Form with Vertical Stepper
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_FormWithVerticalStepper`
-- **Type:** Template
-- **Subtype:** FORM
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+This component displays a stepper with naviation functionality inside screen flow, allowing users to move through each step in the screen flow by clicking on the respective step.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+Note: To apply this custom component to the screen flow, it must be added to each step individually.
 
-## Runtime
+<Primary />
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+## Props
+
+<Controls />

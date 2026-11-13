@@ -1,16 +1,23 @@
-# Banner
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Display a banner with messages about the case
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_Banner`
-- **Type:** Widget
-- **Subtype:** PAGE, CASE
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+The Banner widget can render messages for a case view - edit the pyStage view and insert this widget. Pass a Data page name that will be called
+everytime the assignment is submitted. Your DP is a list DP that will support the pyID parameter. You can return a list of messages in the pxResults embedded object
+using the pyDescription property. The pyDescription must be text only, HTML is not supported.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+The banner can be dismissed if 'dismissible' is set to true. There are 2 ways to configure the dismiss action:
 
-## Runtime
+- through a case wide action - in this case, set the dismissAction with the ID of the flow action - Your flow action can perform some post-processing and update the case data
+- through an extra parameter called on the data page - in this case do not set any value to dismissAction - in this case, the DP needs to update the case and perform the update directly
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+After the action is perform, the component will automatically refresh the case view to show the updated values.
+
+<Primary />
+
+## Props
+
+<Controls />

@@ -1,16 +1,49 @@
-# Trend Display
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Trend Display
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_TrendDisplay`
-- **Type:** Field
-- **Subtype:** Decimal-Currency
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+This component is a flexible component that can render a currency value or a string using different custom color - It can also display a trend of the value (up or down) as well as render a line chart of multiple pieces of data.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+<Primary />
 
-## Runtime
+## Props
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+<Controls />
+
+## Examples
+
+Trend of a field over a reporting value - the values are provides as a comma-separated string
+
+<Story of={DemoStories.Demo1} />
+
+Display a currency or percentage value based on the trend (positive or negative)
+
+<Story of={DemoStories.Demo2} />
+<Story of={DemoStories.Demo3} />
+<Story of={DemoStories.Demo4} />
+<Story of={DemoStories.Demo5} />
+
+Same as before but displayed using renderingMode='badge'
+
+<Story of={DemoStories.Demo2_badge} />
+<Story of={DemoStories.Demo3_badge} />
+<Story of={DemoStories.Demo4_badge} />
+<Story of={DemoStories.Demo5_badge} />
+
+Display values with custom colors
+
+<Story of={DemoStories.Demo6_1} />
+<Story of={DemoStories.Demo6_2} />
+
+## Demo
+
+Here is an example of using the trend display in a list view
+
+![Configuration](TrendDisplay_Demo.jpg)
+
+and in a case view summary
+
+![Configuration](TrendDisplay_Demo1.jpg)

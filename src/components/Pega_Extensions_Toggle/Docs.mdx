@@ -1,16 +1,20 @@
-# Toggle
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Boolean field rendered as a switch
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_Toggle`
-- **Type:** Field
-- **Subtype:** Boolean
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+The Toggle field component binds to a boolean property and renders it with the Cosmos **Switch** control instead of the standard checkbox. Use the field **Label** for the form field heading and **Caption** for the text shown beside the switch.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+<Primary />
 
-## Runtime
+## Props
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+<Controls />
+
+## Examples
+
+<Story of={DemoStories.On} />
+
+<Story of={DemoStories.ReadOnly} />

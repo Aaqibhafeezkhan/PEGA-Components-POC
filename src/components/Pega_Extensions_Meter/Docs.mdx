@@ -1,16 +1,32 @@
-# Meter
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Meter
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_Meter`
-- **Type:** Field
-- **Subtype:** Decimal-Percentage
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+Meters are visual representations of a quantity or an achievement. Their progress is determined by user actions, rather than system actions. This component will use a percentage field type to render the value between 0 and 100. If the value that you want to render is an integer, create a declare expression to generate a percentage value.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+The meter should not be used to indicate progress, such as loading or percent completion of a task. To communicate progress, use the Loading component in the presentational library.
 
-## Runtime
+<Primary />
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+## Props
+
+<Controls />
+
+## Examples
+
+Example of using a multiple meter to display test coverage
+
+<Story of={DemoStories.Grouped} />
+
+Example of using a multiple meter to display the storage capacity
+
+<Story of={DemoStories.Grouped1} />
+
+## Demo
+
+Here is an example of using the meter in different views (Case Summary, Details and form view)
+
+![Configuration](Meter_Configuration.jpg)

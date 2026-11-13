@@ -1,56 +1,56 @@
 {
-  "name": "Pega_Extensions_TaskList",
-  "label": "TaskList",
-  "description": "TaskList",
-  "organization": "Pega",
-  "version": "5.0.6",
-  "library": "Extensions",
-  "allowedApplications": [],
-  "componentKey": "Pega_Extensions_TaskList",
-  "type": "Widget",
-  "subtype": [
-    "PAGE",
-    "CASE"
-  ],
-  "properties": [
-    {
-      "name": "heading",
-      "label": "Heading",
-      "format": "TEXT",
-      "required": true
-    },
-    {
-      "name": "dataPage",
-      "label": "Data Page name",
-      "format": "TEXT",
-      "required": true
-    },
-    {
-      "label": "Conditions",
-      "format": "GROUP",
-      "properties": [
+    "name": "Pega_Extensions_TaskList",
+    "label": "TaskList",
+    "description": "TaskList",
+    "organization": "Pega",
+    "version": "5.0.6",
+    "library": "Extensions",
+    "allowedApplications": [],
+    "componentKey": "Pega_Extensions_TaskList",
+    "type": "Widget",
+    "subtype": [
+        "PAGE",
+        "CASE"
+    ],
+    "properties": [
         {
-          "name": "visibility",
-          "label": "Visibility",
-          "format": "VISIBILITY"
+            "name": "heading",
+            "label": "Heading",
+            "format": "TEXT",
+            "required": true
+        },
+        {
+            "name": "dataPage",
+            "label": "Data Page name",
+            "format": "TEXT",
+            "required": true
+        },
+        {
+            "label": "Conditions",
+            "format": "GROUP",
+            "properties": [
+                {
+                    "name": "visibility",
+                    "label": "Visibility",
+                    "format": "VISIBILITY"
+                }
+            ]
+        },
+        {
+            "format": "LABEL",
+            "label": "About",
+            "name": "PegaAboutLabel",
+            "variant": "h3"
+        },
+        {
+            "format": "LABEL",
+            "label": "Pega_Extensions 5.0.6, Thu Nov 12 2026, 26.1.1-105720",
+            "name": "PegaAboutData",
+            "variant": "primary"
         }
-      ]
-    },
-    {
-      "format": "LABEL",
-      "label": "About",
-      "name": "PegaAboutLabel",
-      "variant": "h3"
-    },
-    {
-      "format": "LABEL",
-      "label": "Pega_Extensions 5.0.6, Thu Nov 12 2026, 26.1.1-105720",
-      "name": "PegaAboutData",
-      "variant": "primary"
-    }
-  ],
-  "defaultConfig": {},
-  "buildDate": "2026-11-12T21:27:21.117Z",
-  "infinityVersion": "26.1.1-105720",
-  "packageCosmosVersion": "9.25.1-11"
+    ],
+    "defaultConfig": {},
+    "buildDate": "2026-11-12T21:27:21.117Z",
+    "infinityVersion": "26.1.1-105720",
+    "packageCosmosVersion": "9.25.1-11"
 }

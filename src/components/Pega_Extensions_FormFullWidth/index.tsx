@@ -1,16 +1,36 @@
-import { withConfiguration } from '@pega/cosmos-react-core';
-import { PegaComponentRuntime } from '../shared/PegaComponentRuntime';
-import type { PegaRuntimeProps } from '../shared/PegaComponentRuntime';
+import { withConfiguration, FieldGroup, Grid } from '@pega/cosmos-react-core';
 import '../shared/create-nonce';
 
-export type PegaExtensionsFormFullWidthProps = Record<string, any>;
+type FormFullWidthProps = {
+  heading: string;
+  NumCols: string;
+  gridTemplateColumns?: string;
+  children: any;
+};
 
-export const PegaExtensionsFormFullWidth = (props: PegaExtensionsFormFullWidthProps) => (
-  <PegaComponentRuntime
-    {...(props as PegaRuntimeProps)}
-    componentKey="Pega_Extensions_FormFullWidth"
-    componentType="Template"
-  />
-);
+export const PegaExtensionsFormFullWidth = (props: FormFullWidthProps) => {
+  const { heading, NumCols, children } = props;
+  let { gridTemplateColumns } = props;
 
+  const nCols = parseInt(NumCols, 10) || 0;
+  if (!gridTemplateColumns) {
+    if (nCols === 0) {
+      gridTemplateColumns = 'repeat(auto-fit, minmax(40ch, 1fr))';
+    } else {
+      gridTemplateColumns = `repeat(${nCols}, minmax(0, 1fr))`;
+    }
+  }
+  return (
+    <FieldGroup name={heading}>
+      <Grid
+        container={{
+          cols: gridTemplateColumns,
+          gap: 2,
+        }}
+      >
+        {children}
+      </Grid>
+    </FieldGroup>
+  );
+};
 export default withConfiguration(PegaExtensionsFormFullWidth);
