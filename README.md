@@ -2,7 +2,20 @@
 
 A Pega DX Component Builder workspace containing the full component catalogue requested from the [Constellation UI Gallery](https://pegasystems.github.io/constellation-ui-gallery/?path=/docs/getting-started--docs).
 
-The implementation follows the component-per-folder structure from [Pega-component-builder](https://github.com/AIOps-Capabilities-Hub/Pega-component-builder) and imports the official gallery's component source, configuration metadata, support modules, demo stories, tests, styles and documentation from the **5.0.6** catalogue.
+**[Open the interactive component showcase](https://aaqibhafeezkhan.github.io/PEGA-Components-POC/)**
+
+The showcase provides a searchable catalogue of all 56 components, category filters, illustrative browser-side previews and direct links to each component's Designer configuration and Storybook demo source. These previews are not executions of the Pega React components; use Storybook for the actual component demos with mocked PConnect/PCore context.
+
+## GitHub Pages
+
+The static showcase lives in `docs/` and can be published without a GitHub Actions workflow:
+
+1. Open **Settings → Pages**.
+2. Under **Build and deployment**, choose **Deploy from a branch**.
+3. Select branch `main` and folder `/docs`, then save.
+4. GitHub Pages will publish the catalogue at the URL above.
+
+No workflow YAML is required. The existing Storybook setup remains the development environment for the real React component previews.
 
 ## Component coverage
 
@@ -56,7 +69,7 @@ The target Pega Infinity environment must be configured locally in `tasks.config
 
 The source code, component metadata, demo stories, docs and component tests are imported from the public official gallery source. The repository's catalogue validator checks the component set, metadata consistency and required source files.
 
-A live Pega import/build requires access to the target Infinity version, rulesets, authentication and application data pages. This environment did not execute npm installation, Jest, TypeScript, Storybook or the DX Component Builder. Run those commands in the target development environment before promoting the components.
+A live Pega import/build requires access to the target Infinity version, rulesets, authentication and application data pages. A local Storybook build and Pega DX Component Builder build require the development environment described above.
 
 ## Source and licensing
 
