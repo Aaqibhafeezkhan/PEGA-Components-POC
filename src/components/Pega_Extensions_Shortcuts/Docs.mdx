@@ -1,16 +1,22 @@
-# Shortcuts
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Render a list of shortcuts in a widget
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_Shortcuts`
-- **Type:** Widget
-- **Subtype:** PAGE, CASE
-- **Catalogue version:** 5.0.6
+# Support
 
-## Designer configuration
+This component is **deprecated** and may be removed in a future release of the UI Gallery. In Pega '26, you can use the out-of-the-box Shortcuts widget.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+**It is strongly recommended to remove this component from your application** and switch to the out-of-the-box Shortcuts widget.
 
-## Runtime
+# Overview
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+The Shortcuts utility renders a list of links inside a card - Each link will open a page inside your application or could open an external URL.
+
+The widget can render the links on a single row (displayType = 'simple') or group them by category. When using the 'grouped' displayType, a JSON object must be passed as a string.
+
+<Primary />
+
+## Props
+
+<Controls />

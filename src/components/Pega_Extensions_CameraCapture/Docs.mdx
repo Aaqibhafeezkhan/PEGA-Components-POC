@@ -1,16 +1,32 @@
-# Camera Capture
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Camera Capture
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_CameraCapture`
-- **Type:** Widget
-- **Subtype:** CASE
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+The **Camera Capture** widget lets users take photos using their device camera and save them directly as case attachments. It provides a simple and intuitive interface for capturing, previewing, and attaching images to a case.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+It provides a streamlined UI for:
 
-## Runtime
+- Starting the camera and previewing the live feed
+- Capturing an image
+- Retaking the image if necessary
+- Uploading the final image directly to a case
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+#### Widget Configuration
+
+This widget does not require additional configuration parameters. However, it relies on:
+
+- **Case Info** from Pega:
+  - retrieved using `getPConnect().getValue(CASE_INFO)`
+
+<Primary />
+
+## Props
+
+<Controls />
+
+# Contributors
+
+This component was contributed by Gurbinder Singh working with [Bits In Glass | www.bitsinglass.com](https://www.bitsinglass.com)

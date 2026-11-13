@@ -1,16 +1,14 @@
-# Password
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Password
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_PasswordInput`
-- **Type:** Field
-- **Subtype:** Text
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+This field-level component allows to render a text field as a 'password' type.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+<Primary />
 
-## Runtime
+## Props
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+<Controls />

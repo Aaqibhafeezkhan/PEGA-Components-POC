@@ -1,16 +1,20 @@
-# CPQ tree
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-CPQ tree
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_CPQTree`
-- **Type:** Field
-- **Subtype:** Text
-- **Catalogue version:** 5.0.6
+# Support
 
-## Designer configuration
+This component provides **limited support**. It is read-only and is not intended as full support for the CPQ application.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+This component is **not supported on Launchpad**. It is intended for Pega Platform only.
 
-## Runtime
+# Overview
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+This component reads the CPQ Tree structure and displays it in Constellation.
+
+<Primary />
+
+## Props
+
+<Controls />

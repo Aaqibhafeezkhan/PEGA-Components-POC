@@ -1,16 +1,16 @@
-# Form Full Width
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Form Full Width
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_FormFullWidth`
-- **Type:** Template
-- **Subtype:** FORM
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+This component allows to display subviews or fields over several columns and will utilize the full width of the assignment. If NumCols is empty, it will make the form responsive with each input taking a max width of 40ch.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+gridTemplateColumns can be set to override the default grid-template-columns CSS attribute on the layout - For example to do a 66%, 33% 2 column, you can enter "2fr 1fr"
 
-## Runtime
+<Primary />
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+## Props
+
+<Controls />

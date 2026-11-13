@@ -1,60 +1,66 @@
-# Pega Components POC
+# Pega Constellation Components POC
 
-A component workspace for Pega Constellation DX extensions. It contains the **56 Field, Widget, and Template entries** in the Constellation UI Gallery 5.0.6 catalogue, organized in the component-per-folder structure used by DX Component Builder.
+A Pega DX Component Builder workspace containing the full component catalogue requested from the [Constellation UI Gallery](https://pegasystems.github.io/constellation-ui-gallery/?path=/docs/getting-started--docs).
 
-## Catalogue
+The implementation follows the component-per-folder structure from [Pega-component-builder](https://github.com/AIOps-Capabilities-Hub/Pega-component-builder) and imports the official gallery's component source, configuration metadata, support modules, demo stories, tests, styles and documentation from the **5.0.6** catalogue.
 
-| Type | Components |
-|---|---:|
-| Field | 23 |
-| Widget | 20 |
-| Template | 13 |
-| **Total** | **56** |
+## Component coverage
 
-Each folder under `src/components` contains:
-- `config.json`: Designer metadata, component type/subtype and property-panel definitions.
-- `index.tsx`: Pega component entry point registered with `withConfiguration`.
-- `Docs.mdx`: component-specific reference notes.
+**56 components: 23 Fields, 20 Widgets and 13 Templates.**
 
-The entry points share `src/components/shared/PegaComponentRuntime.tsx` for consistent PConnect value handling, data-page reads, and category-specific rendering.
+### Fields
 
-## References
+Actionable Button, Base 64 File Upload, Banner Input, Barcode, CPQ Tree, Case Reference, Checkbox Row, Checkbox Trigger, Display PDF, Iframe Wrapper, Image Magnify, JSON Editor, Markdown Editor, Masked Input, Meter, Password Input, QRCode, Scheduler, Signature Capture, Star Rating Input, Status Badge, Toggle, Trend Display.
 
-- Structure and build workflow: [AIOps-Capabilities-Hub/Pega-component-builder](https://github.com/AIOps-Capabilities-Hub/Pega-component-builder)
-- Component catalogue and metadata: [pegasystems/constellation-ui-gallery](https://github.com/pegasystems/constellation-ui-gallery)
-- Live gallery: [Constellation UI Gallery](https://pegasystems.github.io/constellation-ui-gallery/)
-- Pega DX component builder documentation: [Pega documentation](https://docs.pega.com/bundle/constellation-dx-components/page/constellation-dx-components/custom-components/whats-new-constellation-dx-component-builder.html)
+### Widgets
 
-The catalogue metadata follows the gallery's 5.0.6 / Pega Infinity 26.1.1 line. Review the target Pega environment and update the package versions and component configuration before importing into another platform release.
+Banner, Calendar, Camera Capture, Card Gallery, Case Launcher, Chat GenAI, Custom KPI Gauge, Display Attachments, Display Brackets, Event Listener, Gantt Chart, Image Carousel, Kanban Board, Language Switch, Network Diagram, OAuth Connect, Org Builder, Shortcuts, Task List, Utility List.
 
-## Requirements
+### Templates
 
-- Node.js 24.x
-- npm 10 or later
-- Pega Infinity 26.1.x for platform-side validation
+Compare Table Layout, Dynamic Hierarchical Form, Dynamic Template, Editable Table Layout, Expandable Table, Field Group As Row, Form Full Width, Form With Vertical Stepper, Hierarchical Form As Tasks, Jaw Layout, Map, Range Slider, Rating Layout.
 
-## Setup
+## Project structure
+
+Each component is under `src/components/Pega_Extensions_<ComponentName>/` and includes its original Designer `config.json`, Pega React entry point, demo story, component documentation, tests and any supporting modules needed by that component.
+
+Shared Pega utilities and ambient types live under `src/components/shared/` and `src/pega-globals.d.ts`. Storybook is configured in `.storybook/`. The component builder uses `tasks.config.json` and `@pega/custom-dx-components`.
+
+## Getting started
+
+**Requirements:** Node.js 24.x and npm 10 or later.
 
 ```bash
 npm install
 npm run validate:catalog
-npm test
-npm run typecheck
+npm test -- --runInBand
+npm run lint:types
+npm run start
+```
+
+To build the DX component package:
+
+```bash
 npm run build
 ```
 
-To build a single component with the DX Component Builder CLI:
+To build Storybook:
 
 ```bash
-npm run build:component
+npm run build-storybook
 ```
 
-## Pega environment configuration
+The target Pega Infinity environment must be configured locally in `tasks.config.json` before running `npm run authenticate` or building/publishing components against a Pega server. The committed file intentionally contains blank server, client, password, certificate and key values. Do not commit credentials, private keys, certificates or environment files.
 
-Edit `tasks.config.json` locally to supply your Pega server, ruleset and authentication details before running `npm run authenticate`. Keep credentials, certificates, private keys and local `.env` files out of Git. The committed configuration deliberately contains blank connection values.
+## Verification boundary
 
-## Runtime integration notes
+The source code, component metadata, demo stories, docs and component tests are imported from the public official gallery source. The repository's catalogue validator checks the component set, metadata consistency and required source files.
 
-This is a POC adapter layer for the gallery catalogue, not a claim that every gallery-specific integration has been certified in a live Pega application. Components that depend on platform messaging, OAuth providers, signatures, media encoders, data pages, case actions or third-party services need their corresponding environment-specific configuration and end-to-end validation. The QR/barcode and signature surfaces are preview adapters until those integrations are connected.
+A live Pega import/build requires access to the target Infinity version, rulesets, authentication and application data pages. This environment did not execute npm installation, Jest, TypeScript, Storybook or the DX Component Builder. Run those commands in the target development environment before promoting the components.
 
-For production use, test every component against the target Infinity version, application rulesets, accessibility requirements, security policies and actual data-page contracts.
+## Source and licensing
+
+Component implementations and component-level assets/docs originate from [Pegasystems/constellation-ui-gallery](https://github.com/pegasystems/constellation-ui-gallery), release 5.0.6. The upstream project is licensed under Apache License 2.0; the license is included in this repository. The local POC project structure is based on [AIOps-Capabilities-Hub/Pega-component-builder](https://github.com/AIOps-Capabilities-Hub/Pega-component-builder).
+
+- [Live Constellation UI Gallery](https://pegasystems.github.io/constellation-ui-gallery/)
+- [Pega DX Component Builder documentation](https://docs.pega.com/bundle/constellation-dx-components/page/constellation-dx-components/custom-components/whats-new-constellation-dx-component-builder.html)

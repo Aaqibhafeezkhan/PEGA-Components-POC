@@ -1,0 +1,67 @@
+import type { StoryObj } from '@storybook/react-webpack5';
+
+import { PegaExtensionsCaseLauncher } from './index';
+
+export default {
+  title: 'Widgets/Case Launcher',
+  component: PegaExtensionsCaseLauncher,
+  argTypes: {
+    classFilter: {
+      options: ['Work-'],
+      control: { control: 'select' },
+    },
+    showLoadingIndicator: {
+      control: 'boolean' as const,
+    },
+    getPConnect: {
+      table: {
+        disable: true,
+      },
+    },
+  },
+};
+
+const setPCore = () => {
+  window.PCore = {
+    getEnvironmentInfo: () => {
+      return {
+        getKeyMapping: (key: string) => key,
+      };
+    },
+    getNameSpaceUtils: () => {
+      return {
+        getDefaultQualifiedName: (name: string) => name,
+      };
+    },
+  } as unknown as typeof PCore;
+};
+
+type Story = StoryObj<typeof PegaExtensionsCaseLauncher>;
+
+export const Default: Story = {
+  render: (args) => {
+    setPCore();
+    const props = {
+      ...args,
+      getPConnect: () => {
+        return {
+          getActionsApi: () => {
+            return {
+              createWork: (className: string) => {
+                alert(`Create case type with className: ${className}`);
+              },
+            };
+          },
+        } as unknown as typeof PConnect;
+      },
+    };
+    return <PegaExtensionsCaseLauncher {...props} />;
+  },
+  args: {
+    heading: 'Start Case',
+    description: 'Short description about the case that you will be able to start',
+    classFilter: 'Work-',
+    labelPrimaryButton: 'Start a case',
+    showLoadingIndicator: false,
+  },
+};

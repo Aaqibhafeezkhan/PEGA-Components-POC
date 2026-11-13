@@ -1,16 +1,24 @@
-# Editable Table Layout
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Editable Table Layout
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_EditableTableLayout`
-- **Type:** Template
-- **Subtype:** DETAILS
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+Render an embedded data list as an editable table - While the recommendation is to use the OOB component to edit an embedded data list, this example showcase how to implement the same functionality using a Constellation DX component.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+While the out-of-the-box (OOB) component is the recommended approach, this component is available for specific needs. It's crucial to understand its limitations, as it does not support many standard functionalities of the OOB embedded table, such as "visible when," "disable when," and "readonly when" conditions on fields. Use this component only when absolutely necessary.
 
-## Runtime
+The component supports the following functionality:
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+- add, delete rows, update fields
+- 1st column is frozen
+- cell rendering is delegated to Constellation using createComponent.
+
+<Primary />
+
+# Configuration
+
+To use this component, create a new view - use this layout template and in the region fields, drill down and select all the fields in your embedded data list
+
+![Configuration](EditableTableLayout.jpg)

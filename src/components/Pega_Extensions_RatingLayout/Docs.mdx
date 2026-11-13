@@ -1,16 +1,30 @@
-# Rating Layout
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Rating Layout
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_RatingLayout`
-- **Type:** Template
-- **Subtype:** DETAILS
-- **Catalogue version:** 5.0.6
+# Overview
 
-## Designer configuration
+The RatingLayout component is a template component that let you enter a set of numeric values between 1 and 5 - Each set of fields is grouped by tabs representing different categories.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+This template can be used inside an form view by adding the values of the embedded page that will contain all the ratings
 
-## Runtime
+<Primary />
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+## Props
+
+<Controls />
+
+## Example
+
+Assuming that you have an embedded object called 'Ratings'. This object contains 3 fields: Category, Label and Value. To use this component, create a new subview inside your step, select the RatingLayout template,
+add the following 3 fields in the picker in this order: [Ratings.Category, Ratings.Label, Ratings.Value] - These 3 values must be passed in this exact order to be correctly used at runtime.
+
+![View configuration](RatingInput_Example_Config_View.png)
+
+![Fields selection](RatingInput_Example_Config_Fields.png)
+
+![Fields configuration](RatingInput_Example_Config_Fields1.png)
+
+Here is how the component looks at runtime:
+![Runtime example](RatingInput_Example_Runtime.png)

@@ -1,82 +1,82 @@
 {
-  "name": "Pega_Extensions_CaseLauncher",
-  "label": "Case Launcher",
-  "description": "Widget will render a heading, text and a button to start a case",
-  "organization": "Pega",
-  "version": "5.0.6",
-  "library": "Extensions",
-  "allowedApplications": [],
-  "componentKey": "Pega_Extensions_CaseLauncher",
-  "type": "Widget",
-  "subtype": [
-    "PAGE",
-    "CASE"
-  ],
-  "properties": [
-    {
-      "name": "heading",
-      "label": "Header",
-      "format": "TEXT",
-      "defaultValue": "Please insert here a personalized header",
-      "required": true
-    },
-    {
-      "name": "description",
-      "label": "Description",
-      "format": "TEXT",
-      "defaultValue": "Please insert here a personalized short description.",
-      "required": true
-    },
-    {
-      "name": "classFilter",
-      "label": "Case type (triggered by primary button)",
-      "format": "SELECT",
-      "placeholder": "Choose option...",
-      "source": {
-        "name": "D_pyQuickCreate",
-        "displayProp": "pyLabel",
-        "valueProp": "pyClassName"
-      },
-      "required": true
-    },
-    {
-      "name": "labelPrimaryButton",
-      "label": "Primary button text",
-      "format": "TEXT",
-      "required": true
-    },
-    {
-      "name": "showLoadingIndicator",
-      "label": "Show loading indicator while creating a case",
-      "format": "BOOLEAN",
-      "defaultValue": false
-    },
-    {
-      "label": "Conditions",
-      "format": "GROUP",
-      "properties": [
+    "name": "Pega_Extensions_CaseLauncher",
+    "label": "Case Launcher",
+    "description": "Widget will render a heading, text and a button to start a case",
+    "organization": "Pega",
+    "version": "5.0.6",
+    "library": "Extensions",
+    "allowedApplications": [],
+    "componentKey": "Pega_Extensions_CaseLauncher",
+    "type": "Widget",
+    "subtype": [
+        "PAGE",
+        "CASE"
+    ],
+    "properties": [
         {
-          "name": "visibility",
-          "label": "Visibility",
-          "format": "VISIBILITY"
+            "name": "heading",
+            "label": "Header",
+            "format": "TEXT",
+            "defaultValue": "Please insert here a personalized header",
+            "required": true
+        },
+        {
+            "name": "description",
+            "label": "Description",
+            "format": "TEXT",
+            "defaultValue": "Please insert here a personalized short description.",
+            "required": true
+        },
+        {
+            "name": "classFilter",
+            "label": "Case type (triggered by primary button)",
+            "format": "SELECT",
+            "placeholder": "Choose option...",
+            "source": {
+                "name": "D_pyQuickCreate",
+                "displayProp": "pyLabel",
+                "valueProp": "pyClassName"
+            },
+            "required": true
+        },
+        {
+            "name": "labelPrimaryButton",
+            "label": "Primary button text",
+            "format": "TEXT",
+            "required": true
+        },
+        {
+            "name": "showLoadingIndicator",
+            "label": "Show loading indicator while creating a case",
+            "format": "BOOLEAN",
+            "defaultValue": false
+        },
+        {
+            "label": "Conditions",
+            "format": "GROUP",
+            "properties": [
+                {
+                    "name": "visibility",
+                    "label": "Visibility",
+                    "format": "VISIBILITY"
+                }
+            ]
+        },
+        {
+            "format": "LABEL",
+            "label": "About",
+            "name": "PegaAboutLabel",
+            "variant": "h3"
+        },
+        {
+            "format": "LABEL",
+            "label": "Pega_Extensions 5.0.6, Thu Nov 12 2026, 26.1.1-105720",
+            "name": "PegaAboutData",
+            "variant": "primary"
         }
-      ]
-    },
-    {
-      "format": "LABEL",
-      "label": "About",
-      "name": "PegaAboutLabel",
-      "variant": "h3"
-    },
-    {
-      "format": "LABEL",
-      "label": "Pega_Extensions 5.0.6, Thu Nov 12 2026, 26.1.1-105720",
-      "name": "PegaAboutData",
-      "variant": "primary"
-    }
-  ],
-  "defaultConfig": {},
-  "buildDate": "2026-11-12T21:27:17.979Z",
-  "infinityVersion": "26.1.1-105720",
-  "packageCosmosVersion": "9.25.1-11"
+    ],
+    "defaultConfig": {},
+    "buildDate": "2026-11-12T21:27:17.979Z",
+    "infinityVersion": "26.1.1-105720",
+    "packageCosmosVersion": "9.25.1-11"
 }

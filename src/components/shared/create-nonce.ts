@@ -1,2 +1,5 @@
-const script = typeof document !== 'undefined' ? document.querySelector('script[nonce]') : null;
-export const cspNonce = script?.getAttribute('nonce') || undefined;
+// @ts-ignore
+if (window?.__webpack_nonce__) {
+  // @ts-ignore
+  __webpack_nonce__ = window.__webpack_nonce__;
+}

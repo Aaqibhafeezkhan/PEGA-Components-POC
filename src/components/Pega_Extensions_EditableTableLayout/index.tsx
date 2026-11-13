@@ -1,16 +1,226 @@
-import { withConfiguration } from '@pega/cosmos-react-core';
-import { PegaComponentRuntime } from '../shared/PegaComponentRuntime';
-import type { PegaRuntimeProps } from '../shared/PegaComponentRuntime';
+import { useState, useEffect } from 'react';
+import {
+  withConfiguration,
+  Progress,
+  Text,
+  createUID,
+  Button,
+  Icon,
+  registerIcon,
+  CardContent,
+  Card,
+  Flex,
+} from '@pega/cosmos-react-core';
+import StyledPegaExtensionsEditableTableLayoutWrapper from './styles';
+import * as trashIcon from '@pega/cosmos-react-core/lib/components/Icon/icons/trash.icon';
+import * as plusIcon from '@pega/cosmos-react-core/lib/components/Icon/icons/plus.icon';
 import '../shared/create-nonce';
+import getAllFields from './utils';
 
-export type PegaExtensionsEditableTableLayoutProps = Record<string, any>;
+registerIcon(plusIcon, trashIcon);
 
-export const PegaExtensionsEditableTableLayout = (props: PegaExtensionsEditableTableLayoutProps) => (
-  <PegaComponentRuntime
-    {...(props as PegaRuntimeProps)}
-    componentKey="Pega_Extensions_EditableTableLayout"
-    componentType="Template"
-  />
-);
+export type TableLayoutProps = {
+  getPConnect: () => typeof PConnect;
+};
+
+export const PegaExtensionsEditableTableLayout = (props: TableLayoutProps) => {
+  const { getPConnect } = props;
+  const [numFields, setNumFields] = useState<number>(0);
+  const [numRows, setNumRows] = useState<number>(0);
+  const [fields, setFields] = useState<Array<any>>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [embedDataRef, setEmbedDataRef] = useState<string>('');
+  const [tableId, setTableId] = useState<string>('');
+
+  // Get the inherited props from the parent to determine label settings
+  const inheritedProps = { ...getPConnect().getInheritedProps() };
+
+  const addRow = () => {
+    setNumRows((prevCount) => {
+      const messageConfig = {
+        meta: props,
+        options: {
+          context: getPConnect().getContextName(),
+          pageReference: 'caseInfo.content',
+          referenceList: `.${embedDataRef}`,
+          viewName: getPConnect().viewName,
+        },
+      };
+      const c11nEnv = PCore.createPConnect(messageConfig as any);
+      (c11nEnv as any).index = prevCount;
+      c11nEnv.getPConnect().getListActions().insert({}, prevCount);
+
+      return prevCount + 1;
+    });
+    setFields((prevFields) => {
+      return prevFields.map((field: any) => {
+        const newField = { ...field };
+        // Add a new empty value
+        newField.value.push('');
+        return newField;
+      });
+    });
+  };
+
+  const deleteRow = (index: number) => {
+    setNumRows((prevCount) => {
+      const messageConfig = {
+        meta: props,
+        options: {
+          context: getPConnect().getContextName(),
+          pageReference: 'caseInfo.content',
+          referenceList: `.${embedDataRef}`,
+          viewName: getPConnect().viewName,
+        },
+      };
+      const c11nEnv = PCore.createPConnect(messageConfig as any);
+
+      c11nEnv.getPConnect().getListActions().deleteEntry(index);
+
+      return prevCount - 1;
+    });
+    setFields((prevFields) => {
+      return prevFields.map((field: any) => {
+        const newField = { ...field };
+        // Delete the value in index position
+        newField.value.splice(index, 1);
+        return newField;
+      });
+    });
+  };
+
+  const genField = (field: any, index: number, key: string) => {
+    const fieldInput: any = {
+      type: field.componentType,
+      config: {
+        value: field.propref,
+        label: field.label,
+        hideLabel: true,
+        classID: field.contextClass,
+        displayMode: '',
+      },
+    };
+    const messageConfig = {
+      meta: fieldInput,
+      options: {
+        context: getPConnect().getContextName(),
+        hasForm: true,
+        pageReference: `caseInfo.content.${embedDataRef}[${index}]`,
+        referenceList: `.${embedDataRef}`,
+        viewName: getPConnect().viewName,
+      },
+    };
+    const c11nEnv = PCore.createPConnect(messageConfig as any);
+
+    return <td key={key}>{c11nEnv.getPConnect().createComponent(fieldInput)}</td>;
+  };
+
+  useEffect(() => {
+    const tmpFields = getAllFields(getPConnect);
+    if (tmpFields && tmpFields[0] && tmpFields[0].value) {
+      setEmbedDataRef(tmpFields[0].pageref);
+
+      /* New API added in 24.2 - not needed for 24.1 */
+      PCore.getContextTreeManager().addPageListNode(
+        getPConnect().getContextName(),
+        'caseInfo.content',
+        getPConnect().viewName ?? getPConnect().getComponentName() ?? '',
+        tmpFields[0].pageref,
+        {},
+      );
+
+      setNumRows(tmpFields[0].value.length);
+      /* This logic will load the DX Component if it is not already loaded */
+      tmpFields.forEach((child: any) => {
+        if (child.componentType && !PCore.getComponentsRegistry().getLazyComponent(child.componentType)) {
+          PCore.getAssetLoader()
+            .getLoader('component-loader')([child.componentType])
+            .then(() => {
+              setNumFields((prevCount) => prevCount + 1);
+            });
+        } else {
+          setNumFields((prevCount) => prevCount + 1);
+        }
+      });
+      setFields(tmpFields);
+    }
+  }, [getPConnect]);
+
+  useEffect(() => {
+    /* We will wait until all the components are loaded before rendering the table */
+    if (fields && fields.length > 0 && numFields === fields.length) {
+      setTableId(createUID());
+      setLoading(false);
+    }
+  }, [numFields, fields]);
+
+  if (loading) {
+    return (
+      <Progress
+        placement='local'
+        message={PCore.getLocaleUtils().getLocaleValue(
+          'Loading content...',
+          'Generic',
+          '@BASECLASS!GENERIC!PYGENERICFIELDS',
+        )}
+      />
+    );
+  }
+
+  return (
+    <Card>
+      <CardContent>
+        <Flex container={{ direction: 'column', gap: 1 }}>
+          <StyledPegaExtensionsEditableTableLayoutWrapper>
+            <table>
+              <caption>
+                <Text variant='h3'>{inheritedProps.label}</Text>
+              </caption>
+              <thead>
+                <tr>
+                  {fields.map((field: any) => {
+                    return (
+                      <th scope='col' key={`${tableId}-head-${field.label}`} id={`${tableId}-head-${field.label}`}>
+                        {field.label}
+                      </th>
+                    );
+                  })}
+                  <th style={{ width: '80px' }}>{getPConnect().getLocalizedValue('Action')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Array.from({ length: numRows }, (_, i) => i).map((_, i) => {
+                  return (
+                    // eslint-disable-next-line @eslint-react/no-array-index-key -- rows are index-stable positional slots
+                    <tr key={`reg-row-${i}`}>
+                      {fields.map((field: any, j: number) => {
+                        return genField(field, i, `${tableId}-row-${i}-${j}`);
+                      })}
+                      <td>
+                        <Button
+                          label={getPConnect().getLocalizedValue('Delete this record')}
+                          variant='simple'
+                          onClick={() => deleteRow(i)}
+                        >
+                          <Icon name='trash' />
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </StyledPegaExtensionsEditableTableLayoutWrapper>
+          <Flex container={{ direction: 'row' }}>
+            <Button variant='simple' onClick={addRow}>
+              <Icon name='plus' />
+              {getPConnect().getLocalizedValue('Add new record')}
+            </Button>
+          </Flex>
+        </Flex>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default withConfiguration(PegaExtensionsEditableTableLayout);

@@ -1,16 +1,36 @@
-# Card Gallery
+import { Meta, Primary, Controls, Story } from '@storybook/addon-docs/blocks';
+import * as DemoStories from './demo.stories';
 
-Card Gallery
+<Meta of={DemoStories} />
 
-- **Component key:** `Pega_Extensions_CardGallery`
-- **Type:** Widget
-- **Subtype:** PAGE, CASE
-- **Catalogue version:** 5.0.6
+# Support
 
-## Designer configuration
+This component is **deprecated** and may be removed in a future release of the UI Gallery. Pega '26 introduces improved gallery templates using Insights that cover most application needs.
 
-The `config.json` file in this folder contains the gallery property-panel metadata and defaults for this component. Keep its `name`, `componentKey`, and the folder name synchronized.
+# Overview
 
-## Runtime
+The Card Gallery is similar to the Kanban board component except that instead of rendering a list of tasks grouped into different columns, it displays a gallery of cards in a responsive grid.
+Each card will represent a case or data object. The list of cards to render is passed using a page list Data Page. The component supports the following features:
 
-This entry point is registered with Pega's `withConfiguration` wrapper and delegates shared field, widget, or template behavior to the POC runtime adapter. Verify data-page parameters, PCore actions, events, accessibility, and target-version compatibility in the receiving Pega application before production use.
+- Ability to create a new card through an action in the header by setting the 'createClassname' property
+- Tasks are rendered using a details view and not hardcoded inside the component, which allows to use visible when and other features to personalize the content of the card
+- Cards can be rendered horizontally (from left to right) or vertically (up / down). The vertically rendering is similar to a masonry layout and will optimize the available space.
+- The Card Gallery component is also compatible with dashboard and will listen to filter changes if the property 'useInDashboard' is set
+
+Note: if 'useInDashboard' is true, the data page must be of type list - it must be 'queryable' and sourced from a Report Definition. Also the DP must return the following fields: 'pyID','pyLabel', 'pyStatusWork', 'pzInsKey', 'pxObjClass'. If you need other properties, you will need to update the code.
+
+## Launchpad
+
+On Launchpad, `readDataObject` / `getDataObjectView` may be unavailable. In that case the card details fallback loads a lookup list data page and shows mapped fields for ID (`pyID`), status (`pyStatusWork`), and update date/time (`pxUpdateDateTime`) via `getMappedKey`. Configure the lookup DP so the business ID parameter matches the mapped `pyID` key (for example Primary Business ID equals Parameters ID).
+
+<Story of={DemoStories.Default} />
+
+## Props
+
+<Controls />
+
+# Example
+
+Here is a screenshot of how the card gallery can look like at runtime using the vertical rendering
+
+![Demo](CardGallery_Demo.jpg)
