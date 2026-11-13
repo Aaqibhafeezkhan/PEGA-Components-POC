@@ -1,0 +1,37 @@
+{
+  "name": "pega-components-poc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pega Constellation DX fields, widgets and templates POC",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "storybook dev --port 6006",
+    "build": "custom-dx-components buildAllComponents",
+    "build:component": "custom-dx-components buildComponent",
+    "validate": "custom-dx-components validateSchema",
+    "validate:all": "custom-dx-components buildAllComponents",
+    "validate:catalog": "node scripts/validate-catalog.mjs",
+    "test": "npm run validate:catalog",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@pega/cosmos-react-core": "9.25.1-11",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0"
+  },
+  "devDependencies": {
+    "@pega/custom-dx-components": "26.1.11",
+    "@pega/pcore-pconnect-typedefs": "^5.1.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "typescript": "^6.0.3",
+    "storybook": "10.6.2",
+    "@storybook/react-webpack5": "10.6.2",
+    "@storybook/addon-docs": "^10.6.2",
+    "@storybook/addon-a11y": "^10.6.2"
+  },
+  "engines": {
+    "node": "24.x",
+    "npm": ">=10"
+  }
+}
