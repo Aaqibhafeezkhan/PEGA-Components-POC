@@ -21,6 +21,8 @@ The `.github/workflows/deploy-storybook.yml` workflow:
 3. Builds Storybook from the actual React component stories.
 4. Publishes the generated `storybook-static/` directory to GitHub Pages.
 
+Storybook's generated asset URLs remain relative to the published project site, so the manager, preview iframe and lazy-loaded story chunks resolve under the repository's GitHub Pages path.
+
 Pull requests run the catalogue validation and Storybook production build without publishing. Pushes to `main` deploy the built site, and the workflow can also be started manually from the Actions tab.
 
 To enable deployment once, open **Settings → Pages → Build and deployment → Source** and select **GitHub Actions**.

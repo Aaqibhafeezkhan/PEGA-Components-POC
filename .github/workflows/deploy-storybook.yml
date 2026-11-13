@@ -40,8 +40,6 @@ jobs:
 
       - name: Build actual Pega React component stories
         run: npm run build-storybook
-        env:
-          STORYBOOK_BASE_PATH: /PEGA-Components-POC/
 
       - name: Configure GitHub Pages
         if: github.ref == 'refs/heads/main'
