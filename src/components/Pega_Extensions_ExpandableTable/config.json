@@ -1,0 +1,65 @@
+{
+  "name": "Pega_Extensions_ExpandableTable",
+  "label": "Expandable Table",
+  "description": "Read-only expandable list as a table, accordion list, or category tabs; boolean columns act as select-all for nested checkboxes",
+  "organization": "Pega",
+  "version": "5.0.6",
+  "library": "Extensions",
+  "allowedApplications": [],
+  "componentKey": "Pega_Extensions_ExpandableTable",
+  "type": "Template",
+  "subtype": "FORM",
+  "properties": [
+    {
+      "name": "A",
+      "label": "Region A (Columns)",
+      "format": "CONTENTPICKER",
+      "addTypeList": [
+        "Fields"
+      ],
+      "allowCreatingGroup": false
+    },
+    {
+      "name": "variant",
+      "label": "Variant",
+      "format": "SELECT",
+      "defaultValue": "table",
+      "required": true,
+      "source": [
+        {
+          "key": "table",
+          "value": "Table"
+        },
+        {
+          "key": "list",
+          "value": "List"
+        },
+        {
+          "key": "tabs",
+          "value": "Tabs"
+        }
+      ]
+    },
+    {
+      "name": "detailViewName",
+      "label": "Detail view name",
+      "format": "TEXT",
+      "required": false
+    },
+    {
+      "format": "LABEL",
+      "label": "About",
+      "name": "PegaAboutLabel",
+      "variant": "h3"
+    },
+    {
+      "format": "LABEL",
+      "label": "Pega_Extensions 5.0.6, Thu Nov 12 2026, 26.1.1-105720",
+      "name": "PegaAboutData",
+      "variant": "primary"
+    }
+  ],
+  "buildDate": "2026-11-12T21:27:18.961Z",
+  "infinityVersion": "26.1.1-105720",
+  "packageCosmosVersion": "9.25.1-11"
+}

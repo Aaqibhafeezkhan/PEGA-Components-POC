@@ -1,0 +1,39 @@
+{
+  "name": "Pega_Extensions_DisplayBrackets",
+  "label": "Display Brackets",
+  "description": "Display Brackets",
+  "organization": "Pega",
+  "version": "5.0.6",
+  "library": "Extensions",
+  "allowedApplications": [],
+  "componentKey": "Pega_Extensions_DisplayBrackets",
+  "type": "Widget",
+  "subtype": [
+    "PAGE",
+    "CASE"
+  ],
+  "icon": "OneColumnPage.svg",
+  "properties": [
+    {
+      "name": "JsonField",
+      "label": "Json Field",
+      "format": "PROPERTY"
+    },
+    {
+      "format": "LABEL",
+      "label": "About",
+      "name": "PegaAboutLabel",
+      "variant": "h3"
+    },
+    {
+      "format": "LABEL",
+      "label": "Pega_Extensions 5.0.6, Thu Nov 12 2026, 26.1.1-105720",
+      "name": "PegaAboutData",
+      "variant": "primary"
+    }
+  ],
+  "defaultConfig": {},
+  "buildDate": "2026-11-12T21:27:18.508Z",
+  "infinityVersion": "26.1.1-105720",
+  "packageCosmosVersion": "9.25.1-11"
+}
