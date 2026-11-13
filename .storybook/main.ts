@@ -1,6 +1,15 @@
 import remarkGfm from 'remark-gfm';
 import type { StorybookConfig } from '@storybook/react-webpack5';
 
+const pagesBasePath = process.env.STORYBOOK_BASE_PATH?.endsWith('/')
+  ? process.env.STORYBOOK_BASE_PATH
+  : process.env.STORYBOOK_BASE_PATH
+    ? `${process.env.STORYBOOK_BASE_PATH}/`
+    : undefined;
+
+const addPagesBaseHref = (head: string) =>
+  pagesBasePath ? `<base href="${pagesBasePath}" />${head}` : head;
+
 const config: StorybookConfig = {
   core: {
     disableTelemetry: true,
@@ -27,6 +36,15 @@ const config: StorybookConfig = {
   typescript: {
     check: false,
     reactDocgen: 'react-docgen-typescript',
+  },
+  managerHead: addPagesBaseHref,
+  previewHead: addPagesBaseHref,
+  webpackFinal: async (webpackConfig) => {
+    if (pagesBasePath && webpackConfig.output) {
+      webpackConfig.output.publicPath = pagesBasePath;
+    }
+
+    return webpackConfig;
   },
 };
 

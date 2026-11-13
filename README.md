@@ -2,20 +2,28 @@
 
 A Pega DX Component Builder workspace containing the full component catalogue requested from the [Constellation UI Gallery](https://pegasystems.github.io/constellation-ui-gallery/?path=/docs/getting-started--docs).
 
-**[Open the interactive component showcase](https://aaqibhafeezkhan.github.io/PEGA-Components-POC/)**
+**[Open the live Pega React component Storybook](https://aaqibhafeezkhan.github.io/PEGA-Components-POC/)**
 
-The showcase provides a searchable catalogue of all 56 components, category filters, illustrative browser-side previews and direct links to each component's Designer configuration and Storybook demo source. These previews are not executions of the Pega React components; use Storybook for the actual component demos with mocked PConnect/PCore context.
+The published site is the production Storybook build from this repository. It loads the actual React DX components from `src/components` and displays the existing component stories, rather than substituting hand-written HTML previews.
 
-## GitHub Pages
+## Published Storybook
 
-The static showcase lives in `docs/` and can be published without a GitHub Actions workflow:
+The public Storybook build is generated from the component source and `demo.stories.tsx` files. The stories provide the component props and local Pega context mocks needed to render each component in isolation, alongside the Cosmos theme and Storybook controls.
 
-1. Open **Settings → Pages**.
-2. Under **Build and deployment**, choose **Deploy from a branch**.
-3. Select branch `main` and folder `/docs`, then save.
-4. GitHub Pages will publish the catalogue at the URL above.
+The public site does not connect to a Pega Infinity environment. Server actions, authenticated services, data pages and live case data still require a configured Pega runtime.
 
-No workflow YAML is required. The existing Storybook setup remains the development environment for the real React component previews.
+## GitHub Pages deployment
+
+The `.github/workflows/deploy-storybook.yml` workflow:
+
+1. Installs the locked npm dependencies with Node.js 24.
+2. Validates the 56-component catalogue.
+3. Builds Storybook from the actual React component stories.
+4. Publishes the generated `storybook-static/` directory to GitHub Pages.
+
+Pull requests run the catalogue validation and Storybook production build without publishing. Pushes to `main` deploy the built site, and the workflow can also be started manually from the Actions tab.
+
+To enable deployment once, open **Settings → Pages → Build and deployment → Source** and select **GitHub Actions**.
 
 ## Component coverage
 
@@ -57,7 +65,7 @@ To build the DX component package:
 npm run build
 ```
 
-To build Storybook:
+To build Storybook locally:
 
 ```bash
 npm run build-storybook
@@ -67,9 +75,9 @@ The target Pega Infinity environment must be configured locally in `tasks.config
 
 ## Verification boundary
 
-The source code, component metadata, demo stories, docs and component tests are imported from the public official gallery source. The repository's catalogue validator checks the component set, metadata consistency and required source files.
+The repository's catalogue validator checks the component set, metadata consistency and required source files. Building Storybook verifies that its stories and component modules can be compiled into a static application.
 
-A live Pega import/build requires access to the target Infinity version, rulesets, authentication and application data pages. A local Storybook build and Pega DX Component Builder build require the development environment described above.
+A live Pega import/build still requires access to the target Infinity version, rulesets, authentication and application data pages.
 
 ## Source and licensing
 
