@@ -1,0 +1,34 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title='Experimental/Overview' />
+
+# Experimental DX Configurations
+
+This section provides prototypes and design patterns to make Pega Constellation DX component configurations significantly more expansive, declarative, and adaptive.
+
+---
+
+## 1. Decision Table-Driven Component Configuration
+
+In traditional Constellation component development, component labels, mappings, visibility rules, and action payloads are often static strings defined in `config.json`. 
+
+By connecting Constellation DX components to **Pega Decision Tables** (such as `pyPulseLocalization` in `Embed-Feed-DataSource`):
+- Dynamic business logic dictates labels, values, and visibility based on row-level conditions.
+- Runtime changes can be deployed without updating UI component code or deploying front-end builds.
+- Multilingual and context-sensitive labels are resolved dynamically through decision rules and localization tokens (`@getLocalizedValue(...)`).
+
+Explore the interactive prototype under:
+👉 **Experimental / Decision Table Config**
+
+---
+
+## 2. View Mode Grouping (`Full`, `List`, `Partial`, `Form`)
+
+Mirroring Pega App Studio's View categorization model:
+- **Full**: Full canvas & dashboard views (e.g., detail preview, overview).
+- **List**: Repeated data and tabulated layouts (e.g., data object lists, reference tables).
+- **Partial**: Complementary cards, summary widgets, inspection drawers, and side panels.
+- **Form**: Actionable input views, collect steps, confirmation screens, and transactional forms.
+
+Explore the multi-mode view switcher under:
+👉 **Experimental / View Mode Grouping**

@@ -51,7 +51,21 @@ const preview: Preview = {
   parameters: {
     options: {
       storySort: {
-        order: ['Getting Started', 'Libraries', 'Support and Contributing'],
+        order: [
+          'Getting Started',
+          'Libraries',
+          'Support and Contributing',
+          'Fields',
+          'Widgets',
+          'Templates',
+          'Experimental',
+          [
+            'Overview',
+            'Decision Table Config',
+            'View Mode Grouping',
+            ['Full', 'List', 'Partial', 'Form']
+          ]
+        ],
       },
     },
     backgrounds: {
@@ -239,3 +253,4 @@ const preview: Preview = {
 };
 
 export default preview;
+
