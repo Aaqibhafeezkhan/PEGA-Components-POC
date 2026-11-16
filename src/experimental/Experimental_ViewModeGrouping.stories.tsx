@@ -8,10 +8,9 @@ import {
   Flex,
   Button,
   Input,
-  Badge,
+  Status,
   Text,
   FieldValueList,
-  Grid,
 } from '@pega/cosmos-react-core';
 
 const Container = styled.div`
@@ -180,7 +179,7 @@ export const ViewModeCatalog: StoryObj = {
                 <Text variant='h3' style={{ margin: 0 }}>
                   📄 {item.name}
                 </Text>
-                <Badge variant='info'>{item.category} View</Badge>
+                <Status variant='info'>{item.category} View</Status>
               </Flex>
               <Text>{item.description}</Text>
               <FieldValueList

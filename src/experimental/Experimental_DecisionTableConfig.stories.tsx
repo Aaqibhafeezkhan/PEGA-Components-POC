@@ -6,9 +6,8 @@ import {
   CardHeader,
   CardContent,
   Flex,
-  Select,
   Input,
-  Badge,
+  Status,
   Text,
   FieldValueList,
 } from '@pega/cosmos-react-core';
@@ -57,6 +56,21 @@ const DecisionTable = styled.table`
   }
 `;
 
+const StyledNativeSelect = styled.select`
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background-color: #ffffff;
+  font-size: 0.875rem;
+  color: #111827;
+
+  &:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 1px;
+  }
+`;
+
 const PreviewBox = styled.div`
   padding: 1rem;
   border-radius: 6px;
@@ -76,7 +90,7 @@ interface DecisionRow {
   condition: string;
   labelKey: string;
   actionReturn: string;
-  badgeVariant: 'info' | 'success' | 'warn' | 'urgent';
+  statusVariant: 'info' | 'success' | 'warn' | 'urgent';
   description: string;
 }
 
@@ -85,49 +99,49 @@ const DECISION_TABLE_RULES: DecisionRow[] = [
     condition: 'if',
     labelKey: 'pyRepliesToMyComments',
     actionReturn: 'Replies to my comments',
-    badgeVariant: 'info',
+    statusVariant: 'info',
     description: 'Direct thread replies and follow-ups to posts initiated by the current operator.',
   },
   {
     condition: 'else if',
     labelKey: 'pyDirectMessages',
     actionReturn: 'Private posts',
-    badgeVariant: 'warn',
+    statusVariant: 'warn',
     description: 'Confidential 1-to-1 pulses and direct private messages.',
   },
   {
     condition: 'else if',
     labelKey: 'pyFollowingCases',
     actionReturn: 'Comments on followed cases',
-    badgeVariant: 'info',
+    statusVariant: 'info',
     description: 'Activity updates on cases bookmarked or followed by the user.',
   },
   {
     condition: 'else if',
     labelKey: 'pyMentions',
     actionReturn: 'Comments mentioning me',
-    badgeVariant: 'urgent',
+    statusVariant: 'urgent',
     description: 'High-priority pulse messages tagging @User handle.',
   },
   {
     condition: 'else if',
     labelKey: 'Posts',
     actionReturn: 'All feed posts',
-    badgeVariant: 'success',
+    statusVariant: 'success',
     description: 'Standard public pulses across the application space.',
   },
   {
     condition: 'else if',
     labelKey: 'pyAllDirectMessages',
     actionReturn: 'All private messages',
-    badgeVariant: 'warn',
+    statusVariant: 'warn',
     description: 'Aggregated mailbox of direct communications.',
   },
   {
     condition: 'otherwise',
     labelKey: '*',
     actionReturn: '@getLocalizedValue(Label)',
-    badgeVariant: 'info',
+    statusVariant: 'info',
     description: 'Fallback rule invoking Pega localization engine.',
   },
 ];
@@ -163,7 +177,7 @@ export const InteractiveDecisionTable: StoryObj = {
         <Card>
           <CardHeader
             actions={
-              <Badge variant={activeRule.badgeVariant}>Rule Active: {activeRule.condition}</Badge>
+              <Status variant={activeRule.statusVariant}>Rule Active: {activeRule.condition}</Status>
             }
           >
             Decision Table: pyPulseLocalization
@@ -199,7 +213,7 @@ export const InteractiveDecisionTable: StoryObj = {
                           <code>{rule.actionReturn}</code>
                         </td>
                         <td>
-                          <Badge variant={rule.badgeVariant}>{rule.badgeVariant}</Badge>
+                          <Status variant={rule.statusVariant}>{rule.statusVariant}</Status>
                         </td>
                       </tr>
                     );
@@ -216,9 +230,15 @@ export const InteractiveDecisionTable: StoryObj = {
           <CardContent>
             <Flex container={{ direction: 'column', gap: 1 }}>
               <Flex container={{ direction: 'row', gap: 2, alignItems: 'center' }}>
-                <div style={{ minWidth: 260 }}>
-                  <Select
-                    label='Select Incoming Context (Condition Key)'
+                <div style={{ minWidth: 280 }}>
+                  <label
+                    htmlFor='decision-table-select'
+                    style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}
+                  >
+                    Select Incoming Context (Condition Key)
+                  </label>
+                  <StyledNativeSelect
+                    id='decision-table-select'
                     value={selectedKey}
                     onChange={(e: any) => setSelectedKey(e.target.value)}
                   >
@@ -227,7 +247,7 @@ export const InteractiveDecisionTable: StoryObj = {
                         {r.labelKey} ({r.condition})
                       </option>
                     ))}
-                  </Select>
+                  </StyledNativeSelect>
                 </div>
                 {selectedKey === '*' && (
                   <div style={{ flex: 1 }}>
