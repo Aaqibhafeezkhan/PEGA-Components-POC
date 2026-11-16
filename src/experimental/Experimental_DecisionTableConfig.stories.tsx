@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardContent,
   Flex,
+  Button,
   Input,
   Status,
   Text,
@@ -16,9 +17,95 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  max-width: 900px;
+  max-width: 960px;
   margin: 0 auto;
   padding: 1.5rem;
+`;
+
+// Top Navigation Bar simulating Pega Dev Studio header with Dropdowns
+const PegaHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 2px solid #e5e7eb;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+`;
+
+const HeaderTitleGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+`;
+
+const HeaderButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+`;
+
+const DropdownWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const DropdownTrigger = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+  }
+
+  &:focus {
+    outline: 2px solid #2563eb;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 200px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  padding: 0.35rem 0;
+`;
+
+const DropdownItem = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+  }
 `;
 
 const TableWrapper = styled.div`
@@ -83,9 +170,34 @@ export default {
   parameters: {
     layout: 'padded',
   },
+  argTypes: {
+    selectedConditionKey: {
+      name: 'Decision Table Context Key',
+      control: 'select',
+      description: 'Storybook Control dropdown for configuration changes',
+      options: [
+        'pyRepliesToMyComments',
+        'pyDirectMessages',
+        'pyFollowingCases',
+        'pyMentions',
+        'Posts',
+        'pyAllDirectMessages',
+        '*',
+      ],
+    },
+    customParameter: {
+      name: 'Dynamic Fallback Parameter',
+      control: 'text',
+      description: 'Used when key is * (otherwise branch)',
+    },
+    actionSimulation: {
+      name: 'Triggered Pega Action',
+      control: 'select',
+      options: ['executeDecision', 'evaluateDataPage', 'reloadView', 'updateLocalizationToken'],
+    },
+  },
 } satisfies Meta;
 
-// Simulated Pega Decision Table records based on pyPulseLocalization / Embed-Feed-DataSource
 interface DecisionRow {
   condition: string;
   labelKey: string;
@@ -146,10 +258,35 @@ const DECISION_TABLE_RULES: DecisionRow[] = [
   },
 ];
 
-export const InteractiveDecisionTable: StoryObj = {
-  render: () => {
-    const [selectedKey, setSelectedKey] = useState<string>('pyMentions');
-    const [customParam, setCustomParam] = useState<string>('');
+type Story = StoryObj<{
+  selectedConditionKey?: string;
+  customParameter?: string;
+  actionSimulation?: string;
+}>;
+
+export const InteractiveDecisionTable: Story = {
+  args: {
+    selectedConditionKey: 'pyMentions',
+    customParameter: '',
+    actionSimulation: 'executeDecision',
+  },
+  render: (args) => {
+    // Both Storybook Controls panel dropdown AND the in-canvas dropdown stay synchronized
+    const [selectedKey, setSelectedKey] = useState<string>(args.selectedConditionKey || 'pyMentions');
+    const [customParam, setCustomParam] = useState<string>(args.customParameter || '');
+
+    // State for top navigation dropdown menus (Save as ⌵, Rule actions ⌵)
+    const [openDropdown, setOpenDropdown] = useState<'saveAs' | 'ruleActions' | null>(null);
+    const [lastActionNotification, setLastActionNotification] = useState<string>('');
+
+    // Sync when args change from Storybook Controls panel
+    React.useEffect(() => {
+      if (args.selectedConditionKey) setSelectedKey(args.selectedConditionKey);
+    }, [args.selectedConditionKey]);
+
+    React.useEffect(() => {
+      if (args.customParameter !== undefined) setCustomParam(args.customParameter);
+    }, [args.customParameter]);
 
     const activeRule =
       DECISION_TABLE_RULES.find((r) => r.labelKey === selectedKey) ||
@@ -162,17 +299,100 @@ export const InteractiveDecisionTable: StoryObj = {
           : '@getLocalizedValue(Label)'
         : activeRule.actionReturn;
 
+    const toggleDropdown = (name: 'saveAs' | 'ruleActions') => {
+      setOpenDropdown((prev) => (prev === name ? null : name));
+    };
+
+    const handleMenuClick = (actionName: string) => {
+      setOpenDropdown(null);
+      setLastActionNotification(`Executed: ${actionName}`);
+      setTimeout(() => setLastActionNotification(''), 4000);
+    };
+
     return (
       <Container>
-        <div>
-          <h2>Decision Table Component Configuration</h2>
-          <Text variant='secondary'>
-            Inspired by <strong>Embed-Feed-DataSource • pyPulseLocalization</strong>. Rather than
-            hardcoding field labels, formats, or component actions in static configuration files,
-            this pattern uses a Pega Decision Table to dynamically determine runtime component
-            behavior based on contextual conditions.
-          </Text>
-        </div>
+        {/* Pega Dev Studio Top Header with Dropdown menus (as per Screenshot 1 & 2) */}
+        <PegaHeader>
+          <HeaderTitleGroup>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase' }}>
+                DECISION TABLE
+              </span>
+              <Status variant='success'>Status: Yes</Status>
+            </div>
+            <Text variant='h2' style={{ margin: 0 }}>
+              PulseLocalization
+            </Text>
+            <span style={{ fontSize: '0.75rem', color: '#6b7280' }}>
+              APPLIES TO <strong>Embed-Feed-DataSource</strong> • ID <strong>pyPulseLocalization</strong> • RULESET{' '}
+              <strong>Pega-Social:08-26-01</strong>
+            </span>
+          </HeaderTitleGroup>
+
+          <HeaderButtonGroup>
+            {/* Save as ⌵ Dropdown Menu */}
+            <DropdownWrapper>
+              <DropdownTrigger onClick={() => toggleDropdown('saveAs')}>
+                Save as ▾
+              </DropdownTrigger>
+              {openDropdown === 'saveAs' && (
+                <DropdownMenu>
+                  <DropdownItem onClick={() => handleMenuClick('Save As New Version')}>
+                    Save As (New Version)
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleMenuClick('Save As Specialization')}>
+                    Specialize by RuleSet
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleMenuClick('Save As Circumstance')}>
+                    Circumstance Rule
+                  </DropdownItem>
+                </DropdownMenu>
+              )}
+            </DropdownWrapper>
+
+            {/* Rule actions ⌵ Dropdown Menu */}
+            <DropdownWrapper>
+              <DropdownTrigger onClick={() => toggleDropdown('ruleActions')}>
+                Rule actions ▾
+              </DropdownTrigger>
+              {openDropdown === 'ruleActions' && (
+                <DropdownMenu>
+                  <DropdownItem onClick={() => handleMenuClick('Run Decision Table Test')}>
+                    ▶ Run Rule Test
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleMenuClick('View History / Audits')}>
+                    History & Revisions
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleMenuClick('Export Decision Table CSV')}>
+                    Export to CSV / Excel
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleMenuClick('Show Conflicts')}>
+                    Check Conflicts
+                  </DropdownItem>
+                </DropdownMenu>
+              )}
+            </DropdownWrapper>
+
+            <Button variant='primary' onClick={() => handleMenuClick('Private Edit Checked Out')}>
+              Private edit
+            </Button>
+          </HeaderButtonGroup>
+        </PegaHeader>
+
+        {lastActionNotification && (
+          <div
+            style={{
+              padding: '0.6rem 1rem',
+              backgroundColor: '#ecfdf5',
+              border: '1px solid #a7f3d0',
+              borderRadius: '4px',
+              fontSize: '0.875rem',
+              color: '#065f46',
+            }}
+          >
+            ✓ {lastActionNotification}
+          </div>
+        )}
 
         <Card>
           <CardHeader
@@ -188,8 +408,8 @@ export const InteractiveDecisionTable: StoryObj = {
                 <thead>
                   <tr>
                     <th>Branch</th>
-                    <th>Condition (Label Key)</th>
-                    <th>Action (Return Label / Config)</th>
+                    <th>Conditions: Label</th>
+                    <th>Actions: Return</th>
                     <th>Category</th>
                   </tr>
                 </thead>
@@ -207,10 +427,10 @@ export const InteractiveDecisionTable: StoryObj = {
                           <code>{rule.condition}</code>
                         </td>
                         <td>
-                          <strong>{rule.labelKey}</strong>
+                          <strong>&quot;{rule.labelKey}&quot;</strong>
                         </td>
                         <td>
-                          <code>{rule.actionReturn}</code>
+                          <code>&quot;{rule.actionReturn}&quot;</code>
                         </td>
                         <td>
                           <Status variant={rule.statusVariant}>{rule.statusVariant}</Status>
@@ -224,18 +444,18 @@ export const InteractiveDecisionTable: StoryObj = {
           </CardContent>
         </Card>
 
-        {/* Interactive Simulator */}
+        {/* Configuration Changes Dropdown & Simulator */}
         <Card>
-          <CardHeader>Runtime Constellation Component Simulator</CardHeader>
+          <CardHeader>Configuration Changes & Dynamic Evaluation</CardHeader>
           <CardContent>
             <Flex container={{ direction: 'column', gap: 1 }}>
               <Flex container={{ direction: 'row', gap: 2, alignItems: 'center' }}>
-                <div style={{ minWidth: 280 }}>
+                <div style={{ minWidth: 320 }}>
                   <label
                     htmlFor='decision-table-select'
                     style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.25rem' }}
                   >
-                    Select Incoming Context (Condition Key)
+                    Context Dropdown (Choose Decision Condition)
                   </label>
                   <StyledNativeSelect
                     id='decision-table-select'
@@ -272,7 +492,7 @@ export const InteractiveDecisionTable: StoryObj = {
                     { name: 'Evaluation Logic', value: activeRule.description },
                     {
                       name: 'Pega DX Component Action',
-                      value: `invokeRestApi('executeDecision', { table: 'pyPulseLocalization', key: '${selectedKey}' })`,
+                      value: `invokeRestApi('${args.actionSimulation || 'executeDecision'}', { table: 'pyPulseLocalization', key: '${selectedKey}' })`,
                     },
                   ]}
                 />

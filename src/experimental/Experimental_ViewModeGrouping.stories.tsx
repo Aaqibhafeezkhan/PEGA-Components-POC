@@ -22,6 +22,86 @@ const Container = styled.div`
   padding: 1.5rem;
 `;
 
+// Pega App Studio Header with Actions ⌵, Save and run, Save (matching Screenshot 3)
+const AppStudioHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  border-bottom: 2px solid #e5e7eb;
+  padding: 0.75rem 1.25rem;
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+`;
+
+const HeaderButtonGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  position: relative;
+`;
+
+const DropdownWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const DropdownTrigger = styled.button`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1f2937;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+  }
+
+  &:focus {
+    outline: 2px solid #2563eb;
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 220px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  z-index: 50;
+  padding: 0.35rem 0;
+`;
+
+const DropdownItem = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  color: #374151;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+  }
+`;
+
 const ModeTabs = styled.div`
   display: flex;
   gap: 0.5rem;
@@ -59,6 +139,19 @@ export default {
   title: 'Experimental/View Mode Grouping',
   parameters: {
     layout: 'padded',
+  },
+  argTypes: {
+    activeCategory: {
+      name: 'View Mode Category',
+      control: 'select',
+      description: 'Storybook Control dropdown to switch view layout categories',
+      options: ['Full', 'List', 'Partial', 'Form'],
+    },
+    filterKeyword: {
+      name: 'Search / Filter Views',
+      control: 'text',
+      description: 'Filter views by name or component mapping',
+    },
   },
 } satisfies Meta;
 
@@ -135,18 +228,104 @@ const VIEW_REGISTRY: ViewConfigItem[] = [
   },
 ];
 
-export const ViewModeCatalog: StoryObj = {
-  render: () => {
-    const [selectedCategory, setSelectedCategory] = useState<ViewCategory>('Full');
+type Story = StoryObj<{
+  activeCategory?: ViewCategory;
+  filterKeyword?: string;
+}>;
 
-    const filteredViews = VIEW_REGISTRY.filter((v) => v.category === selectedCategory);
+export const ViewModeCatalog: Story = {
+  args: {
+    activeCategory: 'Full',
+    filterKeyword: '',
+  },
+  render: (args) => {
+    const [selectedCategory, setSelectedCategory] = useState<ViewCategory>(args.activeCategory || 'Full');
+    const [actionsDropdownOpen, setActionsDropdownOpen] = useState(false);
+    const [notification, setNotification] = useState('');
+
+    React.useEffect(() => {
+      if (args.activeCategory) setSelectedCategory(args.activeCategory);
+    }, [args.activeCategory]);
+
+    const handleActionClick = (action: string) => {
+      setActionsDropdownOpen(false);
+      setNotification(`Pega App Studio: ${action}`);
+      setTimeout(() => setNotification(''), 4000);
+    };
+
+    const filteredViews = VIEW_REGISTRY.filter((v) => {
+      const matchesCategory = v.category === selectedCategory;
+      if (!args.filterKeyword) return matchesCategory;
+      const kw = args.filterKeyword.toLowerCase();
+      return (
+        matchesCategory &&
+        (v.name.toLowerCase().includes(kw) || v.mappedComponent.toLowerCase().includes(kw))
+      );
+    });
 
     return (
       <Container>
+        {/* App Studio Header matching Screenshot 3 with Actions ⌵, Save and run, Save */}
+        <AppStudioHeader>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <Text variant='h2' style={{ margin: 0 }}>
+              Case Views & Authoring Designer
+            </Text>
+            <Status variant='info'>App Studio</Status>
+          </div>
+
+          <HeaderButtonGroup>
+            {/* Actions ⌵ Dropdown Menu */}
+            <DropdownWrapper>
+              <DropdownTrigger onClick={() => setActionsDropdownOpen((prev) => !prev)}>
+                Actions ▾
+              </DropdownTrigger>
+              {actionsDropdownOpen && (
+                <DropdownMenu>
+                  <DropdownItem onClick={() => handleActionClick('Configure View Properties')}>
+                    ⚙ Configure View Properties
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleActionClick('Reorder View Layouts')}>
+                    ↕ Reorder Layouts
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleActionClick('Switch to Full Page Canvas')}>
+                    ⛶ Full Page Canvas
+                  </DropdownItem>
+                  <DropdownItem onClick={() => handleActionClick('Discard View Edits')}>
+                    ✕ Discard Changes
+                  </DropdownItem>
+                </DropdownMenu>
+              )}
+            </DropdownWrapper>
+
+            <Button variant='secondary' onClick={() => handleActionClick('Save and Run Case')}>
+              Save and run
+            </Button>
+            <Button variant='primary' onClick={() => handleActionClick('Saved View Layout')}>
+              Save
+            </Button>
+          </HeaderButtonGroup>
+        </AppStudioHeader>
+
+        {notification && (
+          <div
+            style={{
+              padding: '0.6rem 1rem',
+              backgroundColor: '#eff6ff',
+              border: '1px solid #bfdbfe',
+              borderRadius: '4px',
+              fontSize: '0.875rem',
+              color: '#1d4ed8',
+            }}
+          >
+            ✓ {notification}
+          </div>
+        )}
+
         <div>
           <h2>Pega Constellation View Mode Grouping</h2>
           <Text variant='secondary'>
-            Modeled directly from Pega App Studio view authoring (Image 3). Components and templates
+            Modeled directly from Pega App Studio view authoring (Screenshot 3). Components and templates
             are classified under expansive functional view modes: <strong>Full</strong>,{' '}
             <strong>List</strong>, <strong>Partial</strong>, and <strong>Form</strong>.
           </Text>
